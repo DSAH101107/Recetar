@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recetas</title>
+</head>
+<body>
+<h1>Recetas</h1>
+
+<form method="get" th:action="@{/recetas}">
+    <input type="text" name="filtro" placeholder="Buscar..." th:value="${filtro}" />
+    <button type="submit">Buscar</button>
+</form>
+
+<p><a th:href="@{/recetas/crear}">Crear nueva receta</a></p>
+
+<table border="1">
+    <tr><th>ID</th><th>Título</th><th>Acciones</th></tr>
+    <tr th:each="r : ${pagina.content}">
+        <td th:text="${r.id}"></td>
+        <td th:text="${r.titulo}"></td>
+        <td>
+            <a th:href="@{|/recetas/editar/${r.id}|}">Editar</a>
+            <form th:action="@{|/recetas/eliminar/${r.id}|}" method="post" style="display:inline">
+                <button type="submit">Eliminar</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<!-- PAGINACIÓN -->
+<div>
+    <span th:text="'Página ' + ${pagina.number + 1} + ' de ' + ${pagina.totalPages}"></span><br/><br/>
+
+    <a th:if="${!pagina.first}"
+       th:href="@{/recetas(page=${pagina.number - 1}, filtro=${filtro})}">Anterior</a>
+
+    <a th:if="${!pagina.last}"
+       th:href="@{/recetas(page=${pagina.number + 1}, filtro=${filtro})}">Siguiente</a>
+</div>
+
+</body>
+</html>
